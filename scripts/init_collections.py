@@ -74,13 +74,16 @@ def init_collections():
                 )
                 
                 try:
+                    import uuid
+                    
                     client.upsert(
                         collection_name=name,
                         points=[
                             models.PointStruct(
-                                id="collection_info",
+                                id=str(uuid.uuid4()),  # Generate a valid UUID
                                 vector=[0.0] * VECTOR_SIZE,  # Dummy vector
                                 payload={
+                                    "is_metadata": True,
                                     "description": description,
                                     "created_at": datetime.datetime.utcnow().isoformat(),
                                     "vector_size": VECTOR_SIZE
@@ -88,6 +91,7 @@ def init_collections():
                             )
                         ]
                     )
+                    print(f"✅ Added collection info to: {name}")
                 except Exception as e:
                     print(f"⚠️ Could not add collection info: {e}")
                 print(f"✅ Created collection: {name}")
