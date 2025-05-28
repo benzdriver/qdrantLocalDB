@@ -70,13 +70,26 @@ def init_collections():
                     },
                     optimizers_config=models.OptimizersConfigDiff(
                         indexing_threshold=20000  # Indexing threshold for better performance
-                    ),
-                    metadata={
-                        "description": description,
-                        "created_at": datetime.datetime.utcnow().isoformat(),
-                        "vector_size": VECTOR_SIZE
-                    }
+                    )
                 )
+                
+                try:
+                    client.upsert(
+                        collection_name=name,
+                        points=[
+                            models.PointStruct(
+                                id="collection_info",
+                                vector=[0.0] * VECTOR_SIZE,  # Dummy vector
+                                payload={
+                                    "description": description,
+                                    "created_at": datetime.datetime.utcnow().isoformat(),
+                                    "vector_size": VECTOR_SIZE
+                                }
+                            )
+                        ]
+                    )
+                except Exception as e:
+                    print(f"⚠️ Could not add collection info: {e}")
                 print(f"✅ Created collection: {name}")
             else:
                 print(f"ℹ️ Collection already exists: {name}")
