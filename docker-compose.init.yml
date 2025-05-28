@@ -2,30 +2,22 @@ version: '3.8'
 
 services:
   qdrant:
-    image: qdrant/qdrant:latest
-    restart: always
-    container_name: qdrant
-    ports:
-      - "6333:6333"
-      - "6334:6334"
-    volumes:
-      - ./data:/qdrant/storage
-    environment:
-      - QDRANT_ALLOW_RECOVERY_MODE=true
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:6333/healthz"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+    extends:
+      file: docker-compose.yml
+      service: qdrant
 
   init-collections:
     build:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      qdrant:
-        condition: service_healthy
+      - qdrant
     environment:
       - VECTOR_SIZE=1536
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - CANONICAL_COLLECTION=canonical_queries
+      - CONVERSATION_COLLECTION=conversations
+      - DOCUMENT_COLLECTION=documents
+      - MERGED_COLLECTION=merged_knowledge
     command: python /scripts/init_collections.py
