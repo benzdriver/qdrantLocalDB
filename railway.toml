@@ -1,0 +1,12 @@
+[build]
+builder = "dockerfile"
+
+[deploy]
+startCommand = "/bin/sh -c 'curl --retry 5 --retry-delay 5 --retry-connrefused http://localhost:6333/healthz || /usr/bin/qdrant'"
+healthcheckPath = "/healthz"
+healthcheckTimeout = 10
+restartPolicyType = "on_failure"
+
+[service]
+internal_port = 6333
+port = "80"
