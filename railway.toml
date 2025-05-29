@@ -5,7 +5,7 @@ builder = "dockerfile"
 buildCommand = "chmod +x /scripts/railway_init.sh && echo Building Qdrant service..."
 
 [deploy]
-startCommand = "qdrant"
+startCommand = "/qdrant/entrypoint.sh"
 healthcheckPath = "/healthz"
 healthcheckTimeout = 15
 restartPolicyType = "on_failure"
