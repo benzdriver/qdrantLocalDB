@@ -1,0 +1,30 @@
+# Railway deployment configuration for Qdrant vector database
+
+[build]
+builder = "dockerfile"
+buildCommand = "chmod +x /scripts/railway_init.sh && echo Building Qdrant service..."
+
+[deploy]
+startCommand = "qdrant"
+healthcheckPath = "/healthz"
+healthcheckTimeout = 15
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 5
+
+[service]
+internal_port = 6333
+port = "80"
+
+[[services.ports]]
+port = 80
+handlers = ["http"]
+force_https = true
+
+[env]
+QDRANT_ALLOW_RECOVERY_MODE = "true"
+QDRANT_TELEMETRY_DISABLED = "true"
+VECTOR_SIZE = "1536"
+CANONICAL_COLLECTION = "canonical_queries"
+CONVERSATION_COLLECTION = "conversations"
+DOCUMENT_COLLECTION = "documents"
+MERGED_COLLECTION = "merged_knowledge"
