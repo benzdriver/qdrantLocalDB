@@ -6,7 +6,7 @@ buildCommand = "chmod +x /scripts/railway_init.sh && echo Building Qdrant servic
 
 [deploy]
 startCommand = "/qdrant/entrypoint.sh"
-healthcheckPath = "/"
+healthcheckPath = "/dashboard"
 healthcheckTimeout = 60
 healthcheckInterval = 10
 healthcheckStartPeriod = 30
